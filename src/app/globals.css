@@ -120,3 +120,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+.bg-login {
+  background-image: url('/bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
