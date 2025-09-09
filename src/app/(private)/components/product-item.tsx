@@ -6,6 +6,7 @@ import { DescriptionProduct } from './description-product'
 import { formatPrice } from '@/utils/format-price'
 import { Heart } from 'lucide-react'
 import { useFavoritesStore } from '@/stores/useFavoritesStore'
+import { useProductDialogStore } from '@/stores/useProductDialogStore'
 
 export interface Product {
   codigo: string
@@ -21,23 +22,24 @@ interface ProductItemProps {
   product: Product
 }
 
+export const defaultColors = [
+  'bg-amber-800',
+  'bg-red-500',
+  'bg-green-500',
+  'bg-blue-500',
+  'bg-yellow-400',
+  'bg-purple-500',
+  'bg-pink-500',
+  'bg-gray-500',
+  'bg-teal-500',
+  'bg-indigo-500',
+  'bg-orange-500',
+]
+
 export function ProductItem({ product }: ProductItemProps) {
   const { toggleFavorite, isFavorite } = useFavoritesStore()
+  const { openDialog } = useProductDialogStore()
   const favorite = isFavorite(product.codigo)
-
-  const defaultColors = [
-    'bg-amber-800',
-    'bg-red-500',
-    'bg-green-500',
-    'bg-blue-500',
-    'bg-yellow-400',
-    'bg-purple-500',
-    'bg-pink-500',
-    'bg-gray-500',
-    'bg-teal-500',
-    'bg-indigo-500',
-    'bg-orange-500',
-  ]
 
   return (
     <div
@@ -95,7 +97,12 @@ export function ProductItem({ product }: ProductItemProps) {
       </div>
 
       <div className="mt-5 w-full">
-        <Button variant="innovation" size="product" className="w-full">
+        <Button
+          variant="innovation"
+          size="product"
+          className="w-full"
+          onClick={() => openDialog(product)}
+        >
           CONFIRA
         </Button>
       </div>

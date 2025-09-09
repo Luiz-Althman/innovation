@@ -1,6 +1,7 @@
 'use client'
 
 import { HeaderPrivate } from '../components/header'
+import { ProductDialog } from '../components/product-dialog-description'
 import { ProductList } from '../components/product-list'
 import { SearchInputs } from '../components/search-input'
 import { useState } from 'react'
@@ -21,6 +22,7 @@ export default function Products() {
           searchCodigo={searchFilters.codigo}
         />
       </div>
+      <ProductDialog />
     </div>
   )
 }
