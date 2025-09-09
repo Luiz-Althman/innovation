@@ -48,6 +48,7 @@ export function ProductsFilters({ onFilterChange }: ProductsFiltersProps) {
         variant={onlyFavorites ? 'default' : 'outline'}
         onClick={() => updateFilters({ onlyFavorites: !onlyFavorites, sortBy })}
         disabled={favorites.length === 0}
+        aria-label="Filtrar apenas itens favoritos"
       >
         Favoritos
       </Button>
@@ -60,6 +61,7 @@ export function ProductsFilters({ onFilterChange }: ProductsFiltersProps) {
             sortBy: sortBy === 'nome' ? null : 'nome',
           })
         }
+        aria-label="Ordenar os itens por nome"
       >
         Ordenar por Nome
       </Button>
@@ -72,6 +74,7 @@ export function ProductsFilters({ onFilterChange }: ProductsFiltersProps) {
             sortBy: sortBy === 'preco' ? null : 'preco',
           })
         }
+        aria-label="Ordenar os itens por preço"
       >
         Ordenar por Preço
       </Button>

@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import { useProducts } from '@/hooks/useProducts'
-import { ProductItem } from './product-item'
+import { useState, useMemo, useCallback } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Pagination } from './pagination'
 import { ProductsFilters } from './product-filters'
+import { useProducts } from '@/hooks/useProducts'
 import { useFavoritesStore } from '@/stores/useFavoritesStore'
-import { Button } from '@/components/ui/button'
+import { ProductItem } from './product-item'
 
 const PAGE_SIZE = 10
 
@@ -22,6 +21,7 @@ export function ProductList({ searchNome, searchCodigo }: ProductListProps) {
     onlyFavorites: false,
     sortBy: null as 'nome' | 'preco' | null,
   })
+
   const { favorites } = useFavoritesStore()
 
   const { data, isLoading, isError, refetch } = useProducts(
@@ -31,47 +31,63 @@ export function ProductList({ searchNome, searchCodigo }: ProductListProps) {
     searchCodigo,
   )
 
-  const produtos = data?.data || []
-  const totalPages = data ? Math.ceil(data.total / PAGE_SIZE) : 1
+  const totalPages = useMemo(() => {
+    if (!data) return 1
+    return Math.ceil(data.total / PAGE_SIZE)
+  }, [data])
 
-  const favoritesSet = new Set(favorites)
+  const filteredProducts = useMemo(() => {
+    if (!data) return []
 
-  let filteredProducts = produtos
+    let items = data.data
 
-  if (filters.onlyFavorites) {
-    filteredProducts = filteredProducts.filter((p) =>
-      favoritesSet.has(p.codigo),
-    )
-  }
+    if (filters.onlyFavorites) {
+      items = items.filter((p) => favorites.includes(p.codigo))
+    }
 
-  if (filters.sortBy === 'preco') {
-    filteredProducts = [...filteredProducts].sort(
-      (a, b) => Number(a.preco) - Number(b.preco),
-    )
-  } else if (filters.sortBy === 'nome') {
-    filteredProducts = [...filteredProducts].sort((a, b) =>
-      a.nome.localeCompare(b.nome),
-    )
-  }
+    if (filters.sortBy === 'nome') {
+      items = [...items].sort((a, b) => a.nome.localeCompare(b.nome))
+    } else if (filters.sortBy === 'preco') {
+      items = [...items].sort((a, b) => Number(a.preco) - Number(b.preco))
+    }
+
+    if (searchNome) {
+      items = items.filter((p) =>
+        p.nome.toLowerCase().includes(searchNome.toLowerCase()),
+      )
+    }
+    if (searchCodigo) {
+      items = items.filter((p) =>
+        p.codigo.toLowerCase().includes(searchCodigo.toLowerCase()),
+      )
+    }
+
+    return items
+  }, [data, filters, favorites, searchNome, searchCodigo])
+
+  const handleFilterChange = useCallback((newFilters: typeof filters) => {
+    setFilters(newFilters)
+    setPage(1)
+  }, [])
 
   if (isError) {
     return (
-      <div className="flex flex-col items-center justify-center py-10">
-        <p className="mb-4 text-red-500">Erro ao carregar produtos.</p>
-        <Button variant="innovation" onClick={() => refetch()} className="btn">
+      <div className="flex flex-col items-center justify-center gap-4">
+        <p>Erro ao carregar produtos.</p>
+        <button onClick={() => refetch()} className="btn">
           Tentar novamente
-        </Button>
+        </button>
       </div>
     )
   }
 
   return (
     <div className="mt-5">
-      <ProductsFilters onFilterChange={setFilters} />
+      <ProductsFilters onFilterChange={handleFilterChange} />
 
       {isLoading ? (
         <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-5">
-          {Array.from({ length: PAGE_SIZE }).map((_, idx) => (
+          {Array.from({ length: 2 }).map((_, idx) => (
             <div key={idx} className="flex w-full flex-col items-center">
               <Skeleton className="mb-2 h-6 w-32" />
               <Skeleton className="mb-4 h-4 w-20" />
@@ -87,6 +103,8 @@ export function ProductList({ searchNome, searchCodigo }: ProductListProps) {
             </div>
           ))}
         </div>
+      ) : filteredProducts.length === 0 ? (
+        <p className="mt-8 text-center text-lg">Nenhum produto encontrado.</p>
       ) : (
         <>
           <div className="my-5 grid w-full grid-cols-1 gap-8 lg:grid-cols-5">

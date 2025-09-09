@@ -7,6 +7,7 @@ import { formatPrice } from '@/utils/format-price'
 import { Heart } from 'lucide-react'
 import { useFavoritesStore } from '@/stores/useFavoritesStore'
 import { useProductDialogStore } from '@/stores/useProductDialogStore'
+import { memo } from 'react'
 
 export interface Product {
   codigo: string
@@ -36,16 +37,15 @@ export const defaultColors = [
   'bg-orange-500',
 ]
 
-export function ProductItem({ product }: ProductItemProps) {
+export const ProductItem = memo(function ProductItem({
+  product,
+}: ProductItemProps) {
   const { toggleFavorite, isFavorite } = useFavoritesStore()
   const { openDialog } = useProductDialogStore()
   const favorite = isFavorite(product.codigo)
 
   return (
-    <div
-      key={product.codigo}
-      className="flex w-full flex-col items-center justify-center"
-    >
+    <div className="flex w-full flex-col items-center justify-center">
       <header className="flex flex-col items-center justify-center">
         <h3 className="font-bold">{product.nome}</h3>
         <p>{product.codigo}</p>
@@ -53,7 +53,7 @@ export function ProductItem({ product }: ProductItemProps) {
 
       <div className="relative flex w-full flex-col items-center justify-center border">
         {product.exclusivo !== false && (
-          <p className="absolute top-0 right-0 bg-zinc-300 p-2 font-bold text-blue-400">
+          <p className="absolute top-0 right-0 bg-zinc-100 p-2 font-bold text-blue-400">
             EXCLUSIVO!
           </p>
         )}
@@ -67,12 +67,15 @@ export function ProductItem({ product }: ProductItemProps) {
             className={`h-8 w-8 ${favorite ? 'fill-red-500 text-red-500' : ''}`}
           />
         </Button>
+
         <Image
           src={product.imagem}
           alt={product.nome}
           width={250}
           height={250}
           className="object-contain"
+          loading="lazy"
+          priority={false}
         />
 
         <div className="flex flex-col items-center justify-center space-y-4 py-3">
@@ -108,4 +111,4 @@ export function ProductItem({ product }: ProductItemProps) {
       </div>
     </div>
   )
-}
+})

@@ -1,5 +1,11 @@
 import { CardAuth } from './card-auth'
 
+export const generateMetadata = () => ({
+  title: 'Innovation Brindes | Login',
+  description:
+    'Acesse sua conta na Innovation Brindes e descubra soluções personalizadas em brindes corporativos e promocionais de alta qualidade.',
+})
+
 export default async function SignIn() {
   return (
     <div className="bg-login h-screen">

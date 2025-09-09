@@ -19,9 +19,12 @@ export function DescriptionProduct({ description }: { description: string }) {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <span className="block cursor-pointer truncate text-center text-lg">
+              <button
+                type="button"
+                className="m-0 w-full cursor-pointer truncate border-none bg-transparent p-0 text-center text-lg"
+              >
                 {description}
-              </span>
+              </button>
             </TooltipTrigger>
             <TooltipContent
               side="bottom"
@@ -38,9 +41,12 @@ export function DescriptionProduct({ description }: { description: string }) {
       <div className="relative block w-full max-w-[200px] md:hidden">
         <Popover>
           <PopoverTrigger asChild>
-            <span className="block cursor-pointer truncate text-center text-lg">
+            <button
+              type="button"
+              className="m-0 w-full cursor-pointer truncate border-none bg-transparent p-0 text-center text-lg"
+            >
               {description}
-            </span>
+            </button>
           </PopoverTrigger>
           <PopoverContent side="bottom" className="max-w-sm break-words">
             <p>{description}</p>

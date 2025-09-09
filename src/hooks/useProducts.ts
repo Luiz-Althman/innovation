@@ -35,12 +35,6 @@ async function fetchProducts({
     },
   )
 
-  if (res.status === 401) {
-    localStorage.removeItem('auth_token')
-    window.location.href = '/'
-    throw new Error('Não autorizado')
-  }
-
   if (!res.ok) throw new Error('Erro ao buscar produtos')
 
   const data: Product[] = await res.json()

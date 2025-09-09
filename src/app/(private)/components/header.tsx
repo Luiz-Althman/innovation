@@ -1,5 +1,5 @@
 import { Mail, Phone } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 export function HeaderPrivate() {
   return (
@@ -10,13 +10,12 @@ export function HeaderPrivate() {
           <Mail className="text-white" />
           <Phone className="text-white" />
           <div className="flex items-center justify-between gap-3">
-            <Avatar className="h-15 w-15">
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
+            <Avatar className="h-10 w-10">
+              <AvatarFallback>DI</AvatarFallback>
             </Avatar>
             <div className="flex flex-col items-center justify-center">
-              <p className="text-white">Dinamica</p>
-              <p className="text-sm text-white">
+              <p className="font-semibold text-zinc-800">Dinamica</p>
+              <p className="text-xs font-semibold text-zinc-800">
                 {new Date().toLocaleDateString('pt-BR')}
               </p>
             </div>
