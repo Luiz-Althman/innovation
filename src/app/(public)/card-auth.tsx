@@ -22,6 +22,8 @@ const signInFormSchema = z.object({
 
 type SignInFormValues = z.infer<typeof signInFormSchema>
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL as string
+
 export function CardAuth() {
   const navigate = useRouter()
 
@@ -40,17 +42,14 @@ export function CardAuth() {
 
   async function onSubmit(data: SignInFormValues) {
     try {
-      const res = await fetch(
-        'https://apihomolog.innovationbrindes.com.br/api/innova-dinamica/login/acessar',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: data.email,
-            senha: data.password,
-          }),
-        },
-      )
+      const res = await fetch(`${API_BASE_URL}/innova-dinamica/login/acessar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: data.email,
+          senha: data.password,
+        }),
+      })
 
       const resData = await res.json()
 

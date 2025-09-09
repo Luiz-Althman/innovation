@@ -11,6 +11,8 @@ interface FetchProductsParams {
   codigoProduto?: string
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL as string
+
 async function fetchProducts({
   page,
   pageSize,
@@ -23,17 +25,14 @@ async function fetchProducts({
     codigo_produto: codigoProduto || '',
   }
 
-  const res = await fetch(
-    'https://apihomolog.innovationbrindes.com.br/api/innova-dinamica/produtos/listar',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(body),
+  const res = await fetch(`${API_BASE_URL}/innova-dinamica/produtos/listar`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
-  )
+    body: JSON.stringify(body),
+  })
 
   if (!res.ok) throw new Error('Erro ao buscar produtos')
 
