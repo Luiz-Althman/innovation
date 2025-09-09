@@ -17,23 +17,25 @@ Este é um projeto desenvolvido em Next.js 15 com React, TailwindCSS e TypeScrip
 
 ![Performance do site](/performance.png)
 
+-- Em caso de não carregamento da imagem, a mesma está dentro da pasta public do projeto.
+
 ---
 
 ## Estrutura do Projeto
 
 src/
 ├─ app/
-│  ├─ layout.tsx             # Layout principal com Providers
-│  ├─ (private)/             # Telas e componentes privados (requerem login)
-│  │  └─ components/         # Componentes privados como ProductList, Pagination
-│  └─ (public)/              # Telas públicas (Login)
-├─ components/               # Componentes reutilizáveis públicos.
-├─ hooks/                    # Hooks customizados (useProducts, etc)
-├─ stores/                   # Zustand stores (favoritos, dialogs)
-├─ utils/                    # Funções utilitárias (formatPrice, etc)
-├─ services/                 # Serviços como auth para armazenamento do token nos cookies.
-├─ providers/                # Providers customizados (ThemeProvider, AuthProvider, etc)
-└─ middleware.ts             # Middleware de autenticação
+│  ├─ layout.tsx    
+│  ├─ (private)/    
+│  │  └─ components/
+│  └─ (public)/     
+├─ components/      
+├─ hooks/           
+├─ stores/          
+├─ utils/           
+├─ services/        
+├─ providers/       
+└─ middleware.ts    
 
 
 ### Providers no Layout
@@ -88,7 +90,7 @@ O `middleware.ts` controla acesso às rotas privadas com base no token de autent
 
 - Escolha entre desc e asc nos filtros ficaram pendentes.
 
-- Vídeo .mp4 do fluxo do teste: [fluxo-teste.mp4](./fluxo-teste.mp4)
+- Vídeo .mp4 do fluxo do teste: [fluxo-teste.mp4](./fluxo-teste.mp4) -> Em caso de não carregamento, deixarei em anexo junto ao e-mail.
 
 ---
 
