@@ -86,8 +86,8 @@ export function ProductList({ searchNome, searchCodigo }: ProductListProps) {
       <ProductsFilters onFilterChange={handleFilterChange} />
 
       {isLoading ? (
-        <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-5">
-          {Array.from({ length: 2 }).map((_, idx) => (
+        <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, idx) => (
             <div key={idx} className="flex w-full flex-col items-center">
               <Skeleton className="mb-2 h-6 w-32" />
               <Skeleton className="mb-4 h-4 w-20" />
@@ -107,7 +107,7 @@ export function ProductList({ searchNome, searchCodigo }: ProductListProps) {
         <p className="mt-8 text-center text-lg">Nenhum produto encontrado.</p>
       ) : (
         <>
-          <div className="my-5 grid w-full grid-cols-1 gap-8 lg:grid-cols-5">
+          <div className="my-5 grid w-full grid-cols-1 gap-8 md:grid-cols-3">
             {filteredProducts.map((item) => (
               <ProductItem key={item.codigo} product={item} />
             ))}

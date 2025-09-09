@@ -66,7 +66,7 @@ export function CardAuth() {
   }
 
   return (
-    <Card className="w-full max-w-lg border-0 bg-[#58bd01] p-8">
+    <Card className="w-full max-w-lg border-0 bg-[#58bd01] p-10">
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
           <div className="relative w-full">
@@ -116,13 +116,15 @@ export function CardAuth() {
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 text-white">
+            <div className="flex items-center gap-3 text-white md:text-lg">
               <Checkbox {...register('remember')} />
-              <Label htmlFor="remember">Manter logado</Label>
+              <Label htmlFor="remember" className="md:text-lg">
+                Manter logado
+              </Label>
             </div>
             <Link
               href="#"
-              className="ml-auto inline-block text-sm text-white underline-offset-4 hover:underline"
+              className="ml-auto inline-block text-sm text-white underline-offset-4 hover:underline md:text-lg"
             >
               Esqueceu a senha?
             </Link>

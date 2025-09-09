@@ -6,7 +6,7 @@ export default function Products() {
   return (
     <div className="h-screen">
       <HeaderPrivate />
-      <div className="px-6 py-12">
+      <div className="px-6 py-12 md:px-16">
         <ProductsClient />
       </div>
       <ProductDialog />
