@@ -86,7 +86,7 @@ O `middleware.ts` controla acesso às rotas privadas com base no token de autent
 
 - Funcionalidades como favoritos, diálogo de produto e paginação estão implementadas com Zustand e React Query.
 
-- Permitir a escolhe entre desc e asc nos filtros ficaram pendentes.
+- Escolha entre desc e asc nos filtros ficaram pendentes.
 
 - Vídeo .mp4 do fluxo do teste: [fluxo-teste.mp4](./fluxo-teste.mp4)
 
