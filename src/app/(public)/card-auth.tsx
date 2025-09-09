@@ -65,7 +65,7 @@ export function CardAuth() {
   }
 
   return (
-    <Card className="w-full max-w-lg border-0 bg-[#58bd01] p-10">
+    <Card className="w-full max-w-lg border-0 bg-[#58bd01] p-8 md:p-10">
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
           <div className="relative w-full">
