@@ -7,7 +7,7 @@ import { formatPrice } from '@/utils/format-price'
 import { Heart } from 'lucide-react'
 import { useFavoritesStore } from '@/stores/useFavoritesStore'
 import { useProductDialogStore } from '@/stores/useProductDialogStore'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 
 export interface Product {
   codigo: string
@@ -44,6 +44,8 @@ export const ProductItem = memo(function ProductItem({
   const { openDialog } = useProductDialogStore()
   const favorite = isFavorite(product.codigo)
 
+  const [hasError, setHasError] = useState(false)
+
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <header className="flex flex-col items-center justify-center">
@@ -68,15 +70,22 @@ export const ProductItem = memo(function ProductItem({
           />
         </Button>
 
-        <Image
-          src={product.imagem}
-          alt={product.nome}
-          width={250}
-          height={250}
-          className="object-contain"
-          loading="lazy"
-          priority={false}
-        />
+        {hasError || !product.imagem ? (
+          <div className="flex h-[250px] w-[250px] items-center justify-center bg-zinc-100 text-zinc-500">
+            Sem imagem
+          </div>
+        ) : (
+          <Image
+            src={product.imagem}
+            alt={product.nome}
+            width={250}
+            height={250}
+            className="object-contain"
+            loading="lazy"
+            priority={false}
+            onError={() => setHasError(true)}
+          />
+        )}
 
         <div className="flex flex-col items-center justify-center space-y-4 py-3">
           <DescriptionProduct description={product.descricao} />
