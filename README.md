@@ -54,7 +54,7 @@ O `middleware.ts` controla acesso às rotas privadas com base no token de autent
 - npm install
 
 ### 2. Criar arquivo .env.local com as variáveis de ambiente
-- NEXT_PUBLIC_BASE_URL=https://api.innovationbrindes.com.br
+- NEXT_PUBLIC_BASE_URL=https://apihomolog.innovationbrindes.com.br/api
 
 ### 3. Rodar a aplicação em desenvolvimento
 - npm run dev
