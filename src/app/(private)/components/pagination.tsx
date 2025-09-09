@@ -1,78 +1,85 @@
 'use client'
 
 import {
-  Pagination as PaginationComponent,
+  Pagination as ShadcnPagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+  PaginationEllipsis,
 } from '@/components/ui/pagination'
 
-type PaginationProps = {
-  links: {
-    label: string
-    active: boolean
-  }[]
-  lastPage: number
+interface PaginationProps {
+  totalPages: number
   currentPage: number
   onPageChange: (page: number) => void
 }
 
 export function Pagination({
-  links,
-  lastPage,
+  totalPages,
   currentPage,
   onPageChange,
 }: PaginationProps) {
-  const handleClickPage = (page: number) => {
-    if (page < 1) page = 1
-    if (page > lastPage) page = lastPage
-    onPageChange(page)
-  }
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
 
   return (
-    <PaginationComponent>
+    <ShadcnPagination>
       <PaginationContent>
-        <PaginationItem
-          onClick={() => handleClickPage(currentPage - 1)}
-          className={`${
-            currentPage > 1
-              ? 'cursor-pointer'
-              : 'cursor-not-allowed text-slate-300 hover:text-slate-300'
-          }`}
-        >
-          <PaginationPrevious />
+        <PaginationItem>
+          <PaginationPrevious
+            href="#"
+            onClick={(e) => {
+              e.preventDefault()
+              if (currentPage > 1) onPageChange(currentPage - 1)
+            }}
+          />
         </PaginationItem>
 
-        {links.map((link, i) =>
-          link.label === '...' ? (
-            <PaginationItem key={i} className="hidden md:inline-flex">
-              <PaginationEllipsis />
-            </PaginationItem>
-          ) : (
-            <PaginationItem key={i} className="cursor-pointer">
-              <PaginationLink
-                onClick={() => handleClickPage(Number(link.label))}
-                isActive={link.active}
-                dangerouslySetInnerHTML={{ __html: link.label }}
-              />
-            </PaginationItem>
-          ),
-        )}
+        {pages.map((page) => {
+          if (
+            page === 1 ||
+            page === totalPages ||
+            Math.abs(page - currentPage) <= 1
+          ) {
+            return (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  href="#"
+                  isActive={page === currentPage}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    onPageChange(page)
+                  }}
+                >
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
+            )
+          }
+          if (
+            (page === 2 && currentPage > 3) ||
+            (page === totalPages - 1 && currentPage < totalPages - 2)
+          ) {
+            return (
+              <PaginationItem key={page}>
+                <PaginationEllipsis />
+              </PaginationItem>
+            )
+          }
+          return null
+        })}
 
-        <PaginationItem
-          onClick={() => handleClickPage(currentPage + 1)}
-          className={`${
-            currentPage < lastPage
-              ? 'cursor-pointer'
-              : 'cursor-not-allowed text-slate-300 hover:text-slate-300'
-          }`}
-        >
-          <PaginationNext />
+        <PaginationItem>
+          <PaginationNext
+            href="#"
+            onClick={(e) => {
+              e.preventDefault()
+              if (currentPage < totalPages) onPageChange(currentPage + 1)
+            }}
+          />
         </PaginationItem>
       </PaginationContent>
-    </PaginationComponent>
+    </ShadcnPagination>
   )
 }
