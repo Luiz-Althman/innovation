@@ -25,10 +25,6 @@ Este é um projeto desenvolvido em Next.js 15 com React, TailwindCSS e TypeScrip
 
 src/
 ├─ app/
-│  ├─ layout.tsx    
-│  ├─ (private)/    
-│  │  └─ components/
-│  └─ (public)/     
 ├─ components/      
 ├─ hooks/           
 ├─ stores/          
