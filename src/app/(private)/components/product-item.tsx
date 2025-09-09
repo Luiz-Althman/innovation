@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { DescriptionProduct } from './description-product'
 import { formatPrice } from '@/utils/format-price'
+import { Heart } from 'lucide-react'
+import { useFavoritesStore } from '@/stores/useFavoritesStore'
 
 export interface Product {
   codigo: string
@@ -20,6 +22,9 @@ interface ProductItemProps {
 }
 
 export function ProductItem({ product }: ProductItemProps) {
+  const { toggleFavorite, isFavorite } = useFavoritesStore()
+  const favorite = isFavorite(product.codigo)
+
   const defaultColors = [
     'bg-amber-800',
     'bg-red-500',
@@ -50,6 +55,16 @@ export function ProductItem({ product }: ProductItemProps) {
             EXCLUSIVO!
           </p>
         )}
+        <Button
+          variant="ghost"
+          className="absolute top-0 left-0"
+          size="lg"
+          onClick={() => toggleFavorite(product.codigo)}
+        >
+          <Heart
+            className={`h-8 w-8 ${favorite ? 'fill-red-500 text-red-500' : ''}`}
+          />
+        </Button>
         <Image
           src={product.imagem}
           alt={product.nome}
