@@ -59,6 +59,8 @@ O `middleware.ts` controla acesso às rotas privadas com base no token de autent
 ### 3. Rodar a aplicação em desenvolvimento
 - npm run dev
 
+- aplicação em PROD -> https://innovation-brindes-teste.vercel.app
+
 ### 4. Rodar testes
 - npm run test
 
