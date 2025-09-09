@@ -11,11 +11,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useState } from 'react'
 
 export function DescriptionProduct({ description }: { description: string }) {
-  const [open, setOpen] = useState(false)
-
   return (
     <div className="flex w-full items-center justify-center">
       <div className="relative hidden w-full max-w-[200px] md:block">
@@ -39,7 +36,7 @@ export function DescriptionProduct({ description }: { description: string }) {
       </div>
 
       <div className="relative block w-full max-w-[200px] md:hidden">
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover>
           <PopoverTrigger asChild>
             <span className="block cursor-pointer truncate text-center text-lg">
               {description}

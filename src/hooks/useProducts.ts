@@ -7,27 +7,20 @@ import { Product } from '@/app/(private)/components/product-item'
 interface FetchProductsParams {
   page: number
   pageSize: number
-  search?: string
-}
-
-interface ProductFilterPayload {
-  nome_produto?: string
-  codigo_produto?: string
+  nomeProduto?: string
+  codigoProduto?: string
 }
 
 async function fetchProducts({
   page,
   pageSize,
-  search,
-}: FetchProductsParams): Promise<{ data: Product[]; total: number }> {
+  nomeProduto,
+  codigoProduto,
+}: FetchProductsParams) {
   const token = getAuthToken()
-  const payload: ProductFilterPayload = {}
-
-  if (search) {
-    payload.nome_produto = search
-    if (/^\d+$/.test(search)) {
-      payload.codigo_produto = search
-    }
+  const body = {
+    nome_produto: nomeProduto || '',
+    codigo_produto: codigoProduto || '',
   }
 
   const res = await fetch(
@@ -38,7 +31,7 @@ async function fetchProducts({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(body),
     },
   )
 
@@ -50,10 +43,21 @@ async function fetchProducts({
   return { data: data.slice(start, end), total }
 }
 
-export function useProducts(page: number, pageSize: number, search?: string) {
+export function useProducts(
+  page: number,
+  pageSize: number,
+  nomeProduto?: string,
+  codigoProduto?: string,
+) {
   return useQuery({
-    queryKey: ['products', page, search],
-    queryFn: () => fetchProducts({ page, pageSize, search }),
+    queryKey: ['products', page, nomeProduto, codigoProduto],
+    queryFn: () =>
+      fetchProducts({
+        page,
+        pageSize,
+        nomeProduto,
+        codigoProduto,
+      }),
     staleTime: 1000 * 60 * 5,
   })
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ProductItem, Product } from './product-item'
+import { ProductItem } from './product-item'
 import { useProducts } from '@/hooks/useProducts'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Pagination } from './pagination'
@@ -10,38 +10,26 @@ import { useFavoritesStore } from '@/stores/useFavoritesStore'
 
 const PAGE_SIZE = 10
 
-export function ProductList() {
+interface ProductListProps {
+  searchNome?: string
+  searchCodigo?: string
+}
+
+export function ProductList({ searchNome, searchCodigo }: ProductListProps) {
   const [page, setPage] = useState(1)
-  const [filters, setFilters] = useState({
-    onlyFavorites: false,
-    sortBy: null as 'nome' | 'preco' | null,
-  })
+  const [onlyFavorites, setOnlyFavorites] = useState(false)
+  const [sort, setSort] = useState<
+    'price-asc' | 'price-desc' | 'name-asc' | 'name-desc' | ''
+  >('')
   const { favorites } = useFavoritesStore()
-  const { data, isLoading, isError } = useProducts(1, 1000)
-  const produtos = data?.data || []
-
-  const filteredAndSorted = () => {
-    let items: Product[] = [...produtos]
-
-    if (filters.onlyFavorites) {
-      items = items.filter((p) => favorites.includes(p.codigo))
-    }
-
-    if (filters.sortBy === 'preco') {
-      items.sort((a, b) => Number(a.preco) - Number(b.preco))
-    } else if (filters.sortBy === 'nome') {
-      items.sort((a, b) => a.nome.localeCompare(b.nome))
-    }
-
-    return items
-  }
-
-  const finalProducts = filteredAndSorted()
-  const totalPages = Math.ceil(finalProducts.length / PAGE_SIZE)
-  const paginatedProducts = finalProducts.slice(
-    (page - 1) * PAGE_SIZE,
-    page * PAGE_SIZE,
+  const { data, isLoading, isError } = useProducts(
+    page,
+    PAGE_SIZE,
+    searchNome,
+    searchCodigo,
   )
+  const produtos = data?.data || []
+  const totalPages = data ? Math.ceil(data.total / PAGE_SIZE) : 1
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -49,9 +37,39 @@ export function ProductList() {
 
   if (isError) return <p>Erro ao carregar produtos.</p>
 
+  let filteredProducts = onlyFavorites
+    ? produtos.filter((p) => favorites.includes(p.codigo))
+    : produtos
+
+  if (sort === 'price-asc')
+    filteredProducts = [...filteredProducts].sort(
+      (a, b) => Number(a.preco) - Number(b.preco),
+    )
+  else if (sort === 'price-desc')
+    filteredProducts = [...filteredProducts].sort(
+      (a, b) => Number(b.preco) - Number(a.preco),
+    )
+  else if (sort === 'name-asc')
+    filteredProducts = [...filteredProducts].sort((a, b) =>
+      a.nome.localeCompare(b.nome),
+    )
+  else if (sort === 'name-desc')
+    filteredProducts = [...filteredProducts].sort((a, b) =>
+      b.nome.localeCompare(a.nome),
+    )
+
   return (
     <div className="mt-5">
-      <ProductsFilters onFilterChange={setFilters} />
+      <ProductsFilters
+        onFilterChange={({ onlyFavorites: fav, sortBy }) => {
+          setOnlyFavorites(fav)
+          if (sortBy === 'nome')
+            setSort(sort === 'name-asc' ? 'name-desc' : 'name-asc')
+          else if (sortBy === 'preco')
+            setSort(sort === 'price-asc' ? 'price-desc' : 'price-asc')
+          else setSort('')
+        }}
+      />
 
       {isLoading ? (
         <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-5">
@@ -74,7 +92,7 @@ export function ProductList() {
       ) : (
         <>
           <div className="my-5 grid w-full grid-cols-1 gap-8 lg:grid-cols-5">
-            {paginatedProducts.map((item) => (
+            {filteredProducts.map((item) => (
               <ProductItem key={item.codigo} product={item} />
             ))}
           </div>

@@ -6,14 +6,14 @@ import { useEffect, useState } from 'react'
 
 type SortOption = 'nome' | 'preco' | null
 
-export function ProductsFilters({
-  onFilterChange,
-}: {
+interface ProductsFiltersProps {
   onFilterChange: (filters: {
     onlyFavorites: boolean
     sortBy: SortOption
   }) => void
-}) {
+}
+
+export function ProductsFilters({ onFilterChange }: ProductsFiltersProps) {
   const { favorites } = useFavoritesStore()
   const [onlyFavorites, setOnlyFavorites] = useState(false)
   const [sortBy, setSortBy] = useState<SortOption>(null)
@@ -29,29 +29,24 @@ export function ProductsFilters({
       setSortBy(parsed.sortBy)
       onFilterChange(parsed)
     }
-  }, [onFilterChange])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  function toggleFavorites() {
-    const newValue = !onlyFavorites
-    setOnlyFavorites(newValue)
-    const updated = { onlyFavorites: newValue, sortBy }
-    localStorage.setItem('productsFilters', JSON.stringify(updated))
-    onFilterChange(updated)
-  }
-
-  function toggleSort(option: SortOption) {
-    const newValue = sortBy === option ? null : option
-    setSortBy(newValue)
-    const updated = { onlyFavorites, sortBy: newValue }
-    localStorage.setItem('productsFilters', JSON.stringify(updated))
-    onFilterChange(updated)
+  function updateFilters(newFilters: {
+    onlyFavorites: boolean
+    sortBy: SortOption
+  }) {
+    setOnlyFavorites(newFilters.onlyFavorites)
+    setSortBy(newFilters.sortBy)
+    localStorage.setItem('productsFilters', JSON.stringify(newFilters))
+    onFilterChange(newFilters)
   }
 
   return (
     <div className="mb-6 flex flex-wrap gap-3">
       <Button
         variant={onlyFavorites ? 'default' : 'outline'}
-        onClick={toggleFavorites}
+        onClick={() => updateFilters({ onlyFavorites: !onlyFavorites, sortBy })}
         disabled={favorites.length === 0}
       >
         Favoritos
@@ -59,14 +54,24 @@ export function ProductsFilters({
 
       <Button
         variant={sortBy === 'nome' ? 'default' : 'outline'}
-        onClick={() => toggleSort('nome')}
+        onClick={() =>
+          updateFilters({
+            onlyFavorites,
+            sortBy: sortBy === 'nome' ? null : 'nome',
+          })
+        }
       >
         Ordenar por Nome
       </Button>
 
       <Button
         variant={sortBy === 'preco' ? 'default' : 'outline'}
-        onClick={() => toggleSort('preco')}
+        onClick={() =>
+          updateFilters({
+            onlyFavorites,
+            sortBy: sortBy === 'preco' ? null : 'preco',
+          })
+        }
       >
         Ordenar por Preço
       </Button>
