@@ -35,11 +35,19 @@ async function fetchProducts({
     },
   )
 
+  if (res.status === 401) {
+    localStorage.removeItem('auth_token')
+    window.location.href = '/'
+    throw new Error('Não autorizado')
+  }
+
   if (!res.ok) throw new Error('Erro ao buscar produtos')
+
   const data: Product[] = await res.json()
   const total = data.length
   const start = (page - 1) * pageSize
   const end = start + pageSize
+
   return { data: data.slice(start, end), total }
 }
 
@@ -52,12 +60,7 @@ export function useProducts(
   return useQuery({
     queryKey: ['products', page, nomeProduto, codigoProduto],
     queryFn: () =>
-      fetchProducts({
-        page,
-        pageSize,
-        nomeProduto,
-        codigoProduto,
-      }),
+      fetchProducts({ page, pageSize, nomeProduto, codigoProduto }),
     staleTime: 1000 * 60 * 5,
   })
 }
